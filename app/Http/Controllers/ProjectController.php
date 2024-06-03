@@ -5,15 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use App\Http\Resources\ProjectResourse;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = Project::query();
+        $projects = $query->paginate(10)->onEachSide(1);
+
+
+        return Inertia::render('Project/Index', [
+
+            'projects' => ProjectResourse::collection($projects),
+        ]);
     }
 
     /**
